@@ -15,6 +15,11 @@ GBM <- function(est_dd,val_dd_list){
              n.minobsinnode = 10,
              shrinkage = 0.001,
              cv.folds = 10,n.cores = 8)
-  RS=as.numeric(predict(fit,val_dd_list,n.trees = best,type = 'link'))
-  return(list(fit,RS))
+  
+  train_cindex=cindex(est_dd,fit$fit)
+  
+  test_RS=as.numeric(predict(fit,val_dd_list,n.trees = best,type = 'link'))
+  test_cindex=cindex(val_dd_list,test_RS)
+  
+  return(list(fit,train_cindex,test_cindex))
 }

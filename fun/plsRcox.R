@@ -6,7 +6,11 @@ myplsRcox <- function(est_dd,val_dd_list){
   dev.off()
   fit <- plsRcox(est_dd[,3:ncol(est_dd)],time=est_dd$OS.time,event=est_dd$OS,nt=as.numeric(cv.plsRcox.res[5]))
   
-  RS=as.numeric(predict(fit,type="lp",newdata=val_dd_list[,-c(1,2)]))
-  return(list(fit,RS))
+  train_cindex=cindex(est_dd,fit$residYChapeau)
+  
+  test_RS=as.numeric(predict(fit,type="lp",newdata=val_dd_list[,-c(1,2)]))
+  test_cindex=cindex(val_dd_list,test_RS)
+  
+  return(list(fit,train_cindex,test_cindex))
 }
 

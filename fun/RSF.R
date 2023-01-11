@@ -6,9 +6,15 @@ RSF <- function(est_dd,val_dd_list){
                proximity = T,
                forest = T,
                seed = seed)
-  RS=predict(fit,newdata = val_dd_list)$predicted
+  
+  train_cindex=cindex(est_dd,fit$predicted)
+  
+  test_RS=predict(fit,newdata = val_dd_list)$predicted
+  test_cindex=cindex(val_dd_list,test_RS)
+  
   rid <- names(fit$importance[fit$importance>0])
   est_dd2 <- est_dd[,c('OS.time','OS',rid)]
   val_dd_list2 <- val_dd_list[,c('OS.time','OS',rid)]
-  return(list(fit,RS,est_dd2,val_dd_list2))
+  return(list(fit,est_dd2,val_dd_list2,train_cindex,test_cindex))
+  
 }
